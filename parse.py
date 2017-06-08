@@ -73,19 +73,48 @@ def filter_line(line, min_dots=10, min_dist_bw_points=10):
     # print("max dist", max([min_dist(pnt) for pnt in filtered_line]))
     return max(filtered_line, key=lambda x: x[0] + x[1]), min(filtered_line, key=lambda x: x[0] + x[1])
 
+def min_max(dots):
+    try:
+        return max(dots, key=lambda x: x[0] + x[1]), min(dots, key=lambda x: x[0] + x[1])
+    except ValueError:
+        return None
 
-def find_lines(pixels):
+
+def min_max_dist(dots):
+    dots.sort(key=functools.cmp_to_key(lambda x, y: sqrt(sum((x - y) * (x - y)))))
+    maxD = 0
+    maxX = -1
+    for x in range(1, len(dots)):
+        dist = sqrt(sum((dots[x - 1] - dots[x]) * (dots[x - 1] - dots[x])))
+        if dist > maxD:
+            maxD = dist
+            maxX = x
+
+    return maxD, maxX
+
+
+def find_lines(pixels, min_dots=10, max_dist=11):
     lines = []
     while len(pixels) > 0:
         line = find_line(pixels)
-        # print(line)
-        fline = filter_line(line)
-        if len(fline) == 2:
-            lines.append(fline)
-        #lines.append(line)
         pixels = [x for x in pixels if not np_contains(x, line)]
-        #print(len(pixels))
-    return lines
+        if len(line) > min_dots:
+            lines.append(line)
+
+    sliced_lines = []
+
+    def append_sliced_line(line):
+        if len(line) > min_dots:
+            sliced_lines.append(min_max(line))
+    for x in lines:
+        dist, pos = min_max_dist(x)
+        if dist > max_dist:
+            append_sliced_line(x[0:pos])
+            append_sliced_line(x[pos+1:])
+        else:
+            append_sliced_line(x)
+
+    return [x for x in sliced_lines if x is not None]
 
 
 def validate_results(val_set, act_set):
@@ -116,6 +145,9 @@ canva = new_canva()
 validate_results(validation_set, lines)
 for x in lines:
     print(x)
-    draw_line_norm(canva, x[0], x[1], 'red')
+    try:
+        draw_line_norm(canva, x[0], x[1], 'red')
+    except ValueError:
+        pass
 
 canva.show()
