@@ -41,7 +41,9 @@ def draw_line_norm(pic, v1, v2, color):
 
 
 def norm_vector(v1, v2):
-    return np.flipud(v2-v1)*np.array([-1,1])
+    flipud = np.flipud(v2 - v1)
+    flipud[0] = -flipud[0]
+    return flipud
 
 
 X = 0
@@ -69,7 +71,7 @@ def project_dot2d(d1, viewer, cam, theta):
     dot = m.dot(d)
     res = np.array([dot[X][0] / dot[W][0], dot[Y][0] / dot[W][0]]).astype(np.int32)
     # print("res")
-    # print(res)
+    # print(d1, "=>", res)
     return res
 
 
