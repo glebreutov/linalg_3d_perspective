@@ -22,6 +22,8 @@ b = tf.Variable(tf.zeros([3]))
 
 y = tf.matmul(tf.matmul(x, W0), W1) + b
 
+def model():
+    pass
 
 y_ = tf.placeholder(tf.float32, [None, 3])
 
@@ -29,11 +31,11 @@ sess = tf.Session()
 init = tf.global_variables_initializer()
 sess.run(init)
 
-# cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y), reduction_indices=[1]))
+cross_entropy = tf.reduce_mean(-tf.reduce_sum(tf.square(y_ * tf.log(y)), reduction_indices=[1]))
 # cross_entropy = tf.reduce_sum(y_ - y) / 100
-cross_entropy = tf.reduce_max(tf.square(y_ - y))
+# cross_entropy = -tf.reduce_mean(tf.abs(y_ - y))
 
-train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
+train_step = tf.train.GradientDescentOptimizer(0.05).minimize(cross_entropy)
 correct_prediction = tf.equal(y, y_)
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 tf.summary.scalar("accuracy", accuracy)
