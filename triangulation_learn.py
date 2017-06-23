@@ -3,6 +3,7 @@ import numpy as np
 from draw_func import project_dot2d
 from random import randrange
 
+
 def data_gen(examples):
     cam1 = [randrange(1, 1000), randrange(1, 1000), randrange(1, 9)]
     cam2 = [randrange(1, 1000), randrange(1, 1000), randrange(1, 9)]
