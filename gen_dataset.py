@@ -26,7 +26,7 @@ def data_gen(examples):
             if 1000 < max(res[0:4]) or min(res[0:4]) <= 0:
                 continue
             else:
-                yield res, [d1[0]]
+                yield res, d1
                 break
 
 
@@ -37,9 +37,15 @@ def gen_frame():
     #seed()
     cam1, cam2, viewer, theta = scene()
     d1 = [randrange(10, 100), randrange(10, 100), randrange(50, 100)]
+    d2 = [d1[0]+5, d1[1], d1[2]]
+
     proj1 = project_dot2d(np.array(d1), np.array(viewer), np.array(cam1), np.array(theta))
     proj2 = project_dot2d(np.array(d1), np.array(viewer), np.array(cam2), np.array(theta))
-    res = list(proj1) + list(proj2)
+
+    proj3 = project_dot2d(np.array(d2), np.array(viewer), np.array(cam1), np.array(theta))
+    proj4 = project_dot2d(np.array(d2), np.array(viewer), np.array(cam2), np.array(theta))
+
+    res = list(proj1) + list(proj2) + list(proj3) + list(proj4)
     return d1, res
 
 
