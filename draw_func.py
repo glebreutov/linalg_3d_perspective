@@ -95,5 +95,5 @@ def draw_line3d(pic, d1, d2, cam, theta, viewer, color='blue'):
     # draw_line_norm(pic, p1, nplus)
 
 
-def new_canva(size=1000):
-    return Image.new('RGB', (size, size), ImageColor.getcolor('white', 'RGB'))
+def new_canva(size_x=1000, size_y=1000):
+    return Image.new('RGB', (size_x, size_y), ImageColor.getcolor('white', 'RGB'))

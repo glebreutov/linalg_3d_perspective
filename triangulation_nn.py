@@ -5,13 +5,13 @@ from tensorflow.python.summary.writer.writer import FileWriter
 from gen_dataset import data_gen_batch
 from train_util import model
 
-OUTS = 3
-INS = 8
-MODEL_NAME = "weights/model_quad_linear.ckpt"
+OUTS = 1
+INS = 4
+MODEL_NAME = "weights/model_back_to_roots_z.ckpt"
 
 x = tf.placeholder(tf.float32, [None, INS])
 
-y = model(x, [INS, 32, 32, OUTS])
+y = model(x, [INS, 64, 64, OUTS])
 
 y_ = tf.placeholder(tf.float32, [None, OUTS])
 
@@ -32,7 +32,7 @@ cross_entropy = tf.reduce_mean(tf.abs(y_ - y))
 correct_prediction = tf.equal(y, y_)
 accuracy = tf.reduce_mean(100*tf.abs(y -y_))
 summary_accuracy = tf.summary.scalar("accuracy", accuracy)
-train_step = tf.train.GradientDescentOptimizer(0.001).minimize(cross_entropy)
+train_step = tf.train.GradientDescentOptimizer(0.01).minimize(cross_entropy)
 fw = FileWriter("log", sess.graph)
 
 
