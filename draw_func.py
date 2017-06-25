@@ -3,6 +3,8 @@ from math import cos, sin
 import numpy as np
 from PIL import ImageColor, Image
 
+from scene import projection, translation, intrinsic
+
 
 def draw_line_norm(pic, v1, v2, color):
     crgb = ImageColor.getcolor(color, 'RGB')
@@ -53,25 +55,27 @@ W = 3
 
 
 def project_dot2d(d1, viewer, cam, theta):
-    thX = np.array([[1, 0, 0], [0, cos(theta[X]), sin(theta[X])], [0, -sin(theta[X]), cos(theta[X])]])
-    thY = np.array([[cos(theta[Y]), 0, -sin(theta[Y])], [0, 1, 0], [sin(theta[Y]), 0, cos(theta[Y])]])
-    thZ = np.array([[cos(theta[Z]), sin(theta[Z]), 0], [-sin(theta[Z]), cos(theta[Z]), 0], [0, 0, 1]])
-    R = thX.dot(thY).dot(thZ)
-    # R = np.array([[0, 0, -1],
-    #               [1, 0, 0],
-    #               [0, -1, 0]])
-    V = np.hstack([R, cam.reshape(3, 1)])
-    V = np.vstack([V, np.zeros(4)])
-    V[3, 3] = 1
-    # print(V)
-    f = 200
-    K = np.array([[f, 0, 100],
-                  [0, f, 100],
-                  [0, 0, 1]])
+    # thX = np.array([[1, 0, 0], [0, cos(theta[X]), sin(theta[X])], [0, -sin(theta[X]), cos(theta[X])]])
+    # thY = np.array([[cos(theta[Y]), 0, -sin(theta[Y])], [0, 1, 0], [sin(theta[Y]), 0, cos(theta[Y])]])
+    # thZ = np.array([[cos(theta[Z]), sin(theta[Z]), 0], [-sin(theta[Z]), cos(theta[Z]), 0], [0, 0, 1]])
+    # R = thX.dot(thY).dot(thZ)
+    # # R = np.array([[0, 0, -1],
+    # #               [1, 0, 0],
+    # #               [0, -1, 0]])
+    # V = np.hstack([R, cam.reshape(3, 1)])
+    # V = np.vstack([V, np.zeros(4)])
+    # V[3, 3] = 1
+    # # print(V)
+    # f = 200
+    # K = np.array([[f, 0, 100],
+    #               [0, f, 100],
+    #               [0, 0, 1]])
+    #
+    # d1 = np.append(d1, 1).reshape(4, 1)
+    # dc = V.dot(d1)
+    # xyz = K.dot(dc[0:3])
 
-    d1 = np.append(d1, 1).reshape(4, 1)
-    dc = V.dot(d1)
-    xyz = K.dot(dc[0:3])
+    xyz = projection(translation(cam, theta), intrinsic(200), d1)
     # m = np.array([
     #     [1, 0, -(viewer[X] / viewer[Z]), 0],
     #     [0, 1, -(viewer[Y] / viewer[Z]), 0],
