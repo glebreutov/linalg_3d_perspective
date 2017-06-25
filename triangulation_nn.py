@@ -5,13 +5,13 @@ from tensorflow.python.summary.writer.writer import FileWriter
 from gen_dataset import data_gen_batch
 from train_util import model
 
-OUTS = 1
-INS = 4
+OUTS = 3
+INS = 10
 MODEL_NAME = "weights/model_back_to_roots_z.ckpt"
 
 x = tf.placeholder(tf.float32, [None, INS])
 
-y = model(x, [INS, 64, 64, OUTS])
+y = model(x, [INS, 32, 32, OUTS])
 
 y_ = tf.placeholder(tf.float32, [None, OUTS])
 
@@ -25,14 +25,13 @@ saver = tf.train.Saver()
 
 # cross_entropy = tf.reduce_mean(
 #       tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y))
+# cross_entropy = tf.losses.mean_pairwise_squared_error(y, y_)
 cross_entropy = tf.reduce_mean(tf.abs(y_ - y))
-# cross_entropy = -tf.reduce_mean(tf.abs(y_ - y))
 
 
-correct_prediction = tf.equal(y, y_)
-accuracy = tf.reduce_mean(100*tf.abs(y -y_))
+accuracy = tf.reduce_mean(tf.abs(y -y_))
 summary_accuracy = tf.summary.scalar("accuracy", accuracy)
-train_step = tf.train.GradientDescentOptimizer(0.01).minimize(cross_entropy)
+train_step = tf.train.GradientDescentOptimizer(0.0007).minimize(cross_entropy)
 fw = FileWriter("log", sess.graph)
 
 
@@ -43,9 +42,9 @@ except NotFoundError:
     print("no model found, creating new model")
 merged = tf.summary.merge_all()
 
-for _ in range(0, 100):
+for _ in range(0, 500):
 
-    batch_x, batch_y = data_gen_batch(100)
+    batch_x, batch_y = data_gen_batch(20)
 
     sess.run(train_step, feed_dict={x: batch_x, y_: batch_y})
 

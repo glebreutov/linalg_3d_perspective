@@ -56,22 +56,44 @@ def project_dot2d(d1, viewer, cam, theta):
     thX = np.array([[1, 0, 0], [0, cos(theta[X]), sin(theta[X])], [0, -sin(theta[X]), cos(theta[X])]])
     thY = np.array([[cos(theta[Y]), 0, -sin(theta[Y])], [0, 1, 0], [sin(theta[Y]), 0, cos(theta[Y])]])
     thZ = np.array([[cos(theta[Z]), sin(theta[Z]), 0], [-sin(theta[Z]), cos(theta[Z]), 0], [0, 0, 1]])
-    m = np.array([
-        [1, 0, -(viewer[X] / viewer[Z]), 0],
-        [0, 1, -(viewer[Y] / viewer[Z]), 0],
-        [0, 0, 1, 0],
-        [0, 0, 1 / viewer[Z], 0]
-    ])
+    R = thX.dot(thY).dot(thZ)
+    # R = np.array([[0, 0, -1],
+    #               [1, 0, 0],
+    #               [0, -1, 0]])
+    V = np.hstack([R, cam.reshape(3, 1)])
+    V = np.vstack([V, np.zeros(4)])
+    V[3, 3] = 1
+    # print(V)
+    f = 200
+    K = np.array([[f, 0, 100],
+                  [0, f, 100],
+                  [0, 0, 1]])
 
-    d = d1 - cam
-    d = thX.dot(thY).dot(thZ).dot(d)
+    d1 = np.append(d1, 1).reshape(4, 1)
+    dc = V.dot(d1)
+    xyz = K.dot(dc[0:3])
+    # m = np.array([
+    #     [1, 0, -(viewer[X] / viewer[Z]), 0],
+    #     [0, 1, -(viewer[Y] / viewer[Z]), 0],
+    #     [0, 0, 1, 0],
+    #     [0, 0, 1 / viewer[Z], 0]
+    # ])
+    #
+    # d = d1 - cam
+    #
+    # d = R.dot(d)
+    #
+    # d = np.append(d, 1).reshape(4, 1)
+    #
+    # dot = m.dot(d)
+    # res = np.array([dot[X][0] / dot[W][0], dot[Y][0] / dot[W][0]]).astype(np.int32)
+    # s = [1000, 1000]
+    # r = [200, 200, -1]
+    # res = np.array([(dot[X][0] * s[X]) / (dot[Z][0] * r[X] * r[Z])
+    #                    ,(dot[Y][0] * s[Y]) / (dot[Z][0] * r[Y] * r[Z])]).astype(np.int32)
 
-    d = np.append(d, 1).reshape(4, 1)
-
-    dot = m.dot(d)
-    res = np.array([dot[X][0] / dot[W][0], dot[Y][0] / dot[W][0]]).astype(np.int32)
-    # print("res")
-    # print(d1, "=>", res)
+    res = (xyz[0:2]/ 200).astype(np.int32).reshape(1, 2)[0]
+    # print(res)
     return res
 
 

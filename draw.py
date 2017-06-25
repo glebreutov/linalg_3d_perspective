@@ -11,8 +11,8 @@ canva = new_canva()
 
 cam = np.array((500, 500, 2))
 # cam = np.array((122, 122, 1))
-viewer = np.array((0, 0, -5))
-theta = np.array((0, 0, 0))
+viewer = np.array((500, 500, 100))
+theta = np.array((0, 0, 00))
 # viewer = np.array((0, 0, 2))
 
 
@@ -20,7 +20,7 @@ def cube_edges():
     x0 = 100
     y0 = 245
     dz0 = 5
-    dz = dz0 + .5
+    dz = dz0 + 145
     edges3d = [
         [np.array((x0, x0, dz0)), np.array((x0, y0, dz0))],
         [np.array((x0, y0, dz0)), np.array((y0, y0, dz0))],
@@ -44,7 +44,10 @@ def project(values, viewer, cam, theta):
 
 def draw_cube(canva, color, viewer, cam, theta):
     for l1, l2 in project(cube_edges(), viewer, cam, theta):
-        draw_line_norm(canva, l1, l2, color)
+        try:
+            draw_line_norm(canva, l1, l2, color)
+        except ValueError as ve:
+            print(ve)
 
 
 if __name__ == "__main__":
@@ -52,7 +55,7 @@ if __name__ == "__main__":
     # print(test_point, "cam1", project_dot2d(test_point, viewer, np.array((500, 500, 1)), theta))
     # print(test_point, "cam2", project_dot2d(test_point, viewer, np.array((400, 400, 2)), theta))
     draw_cube(canva, 'blue', viewer, np.array((500, 500, 1)), theta)
-    draw_cube(canva, 'red', viewer, np.array((400, 400, 2)), theta)
+    # draw_cube(canva, 'red', viewer, np.array((400, 400, 2)), theta)
     # print(cube_edges(viewer, cam, theta))
     # canva.save("cube.bmp")
     canva.show()
