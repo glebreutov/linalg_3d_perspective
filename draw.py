@@ -40,19 +40,20 @@ def draw_cube(canva, color, trans, intr):
 
 
 if __name__ == "__main__":
-    cam = np.array((500, 500, 2))
+    intr = intrinsic(focal=200, aspect_ratio=300, skew=0)
+
+    cam = np.array((475, 500, 2))
     theta = np.array((0.1, 0, 0))
-    trans = translation(cam, theta)
+    trans1 = translation(cam, theta)
 
-    intr = intrinsic(focal=500, aspect_ratio=300, skew=0)
-    draw_cube(canva, 'blue', trans, intr)
+    draw_cube(canva, 'blue', trans1, intr)
 
-    cam = np.array((500, 500, 2))
+    cam = np.array((525, 500, 2))
     theta = np.array((-0.1, 0, 0))
-    trans = translation(cam, theta)
+    trans2 = translation(cam, theta)
 
-    intr = intrinsic(focal=500, aspect_ratio=300, skew=0)
-    draw_cube(canva, 'red', trans, intr)
+
+    draw_cube(canva, 'red', trans2, intr)
 
     # test_point = cube_edges()[3][0]
     # print(test_point, "cam1", project_dot2d(test_point, viewer, np.array((500, 500, 1)), theta))

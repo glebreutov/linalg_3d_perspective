@@ -1,9 +1,7 @@
-from random import randrange
-
 import numpy as np
 
+from dataset_tools import gen_dot
 from draw_func import project_dot2d
-
 
 
 def scene():
@@ -36,7 +34,7 @@ def gen_frame(max_rand=1000):
     #seed()
     cam1, cam2, viewer, theta = scene()
 
-    d1 = [randrange(1, max_rand), randrange(1, max_rand), randrange(50, max_rand)]
+    d1 = gen_dot(max_rand)
 
     proj1 = project_dot2d(np.array(d1), np.array(viewer), np.array(cam1), np.array((0.4, 0, 0)))
     proj2 = project_dot2d(np.array(d1), np.array(viewer), np.array(cam2), np.array((-0.4, 0, 0)))

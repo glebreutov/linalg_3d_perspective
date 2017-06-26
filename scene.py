@@ -35,5 +35,4 @@ def projection(trans_matr, intrins_matr, point):
     # homo_point = np.append(intrins_matr.dot(point), 1)
     # translated = trans_matr.dot(homo_point)
     reshape = proj[0:2].astype(np.int32).reshape(2)
-    print(reshape)
     return reshape
