@@ -30,10 +30,10 @@ sess = tf.Session()
 
 saver = tf.train.Saver()
 
-cross_entropy = 100*tf.reduce_mean(tf.abs(y_ - y))
-#cross_entropy = tf.losses.mean_pairwise_squared_error(y, y_)
+cross_entropy = 1000*tf.reduce_mean(tf.abs(y_ - y))
+# cross_entropy = tf.losses.mean_pairwise_squared_error(y, y_)
 
-train_step = tf.train.GradientDescentOptimizer(0.00007).minimize(cross_entropy)
+train_step = tf.train.GradientDescentOptimizer(0.00001).minimize(cross_entropy)
 sess.run(tf.global_variables_initializer())
 
 try:
@@ -43,7 +43,7 @@ except NotFoundError:
     print("no model found, creating new model")
 
 
-for i in range(0, 10000):
+for i in range(0, 5000):
     batch_x, batch_y = gen_batch(intr, trans1, trans2, STDEV, 50)
     sess.run(train_step, feed_dict={x: batch_x, y_: batch_y})
     if i % 100 ==0:
