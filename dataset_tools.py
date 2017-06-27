@@ -25,7 +25,7 @@ def gen_batch(intr, extr1, extr2, stdev, examples):
         d, p1, p2 = gen_example(dot, intr, extr1, extr2)
 
         concat = np.append(p1, p2)
-        if min(concat) > 0:
+        if min(concat) > 0 and max(concat) < 1000:
             x.append(concat / stdev)
             y.append(d / stdev)
     return x, y
