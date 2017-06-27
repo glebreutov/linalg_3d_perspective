@@ -23,7 +23,7 @@ INS = 4
 STDEV = 500.
 
 x = tf.placeholder(tf.float32, [None, INS])
-y = model(x, [INS, 32, 32, 32, OUTS])
+y = model(x, [INS, 32, 32, 32, OUTS], tf.nn.tanh)
 y_ = tf.placeholder(tf.float32, [None, OUTS])
 
 sess = tf.Session()
@@ -34,7 +34,7 @@ saver = tf.train.Saver()
 cross_entropy = tf.reduce_mean(tf.reduce_sum(tf.abs(y_ - y), reduction_indices=[1]))
 # cross_entropy = tf.losses.mean_pairwise_squared_error(y, y_)
 
-train_step = tf.train.GradientDescentOptimizer(0.001).minimize(cross_entropy)
+train_step = tf.train.GradientDescentOptimizer(0.0001).minimize(cross_entropy)
 sess.run(tf.global_variables_initializer())
 
 try:
