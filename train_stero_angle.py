@@ -34,7 +34,7 @@ saver = tf.train.Saver()
 cross_entropy = tf.reduce_mean(tf.reduce_sum(tf.abs(y_ - y), reduction_indices=[1]))
 # cross_entropy = tf.losses.mean_pairwise_squared_error(y, y_)
 
-train_step = tf.train.GradientDescentOptimizer(0.0001).minimize(cross_entropy)
+train_step = tf.train.GradientDescentOptimizer(0.00005).minimize(cross_entropy)
 sess.run(tf.global_variables_initializer())
 
 try:
